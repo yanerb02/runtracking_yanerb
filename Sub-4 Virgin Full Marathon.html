@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sub-4 Virgin Full Marathon</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1ee;--card:#fff;--ink:#13202a;--mute:#5d6b73;--line:#d5dcd8;--teal:#0e7c86;--sig:#d9441e;--bar:#9fc9cd;--ok:#2a7d4f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f171d;--card:#16232b;--ink:#e8eeee;--mute:#93a3ab;--line:#2a3a43;--teal:#4fc3cd;--sig:#ff7a55;--bar:#2f6a71;--ok:#5fcf93}}
+:root[data-theme="dark"]{--bg:#0f171d;--card:#16232b;--ink:#e8eeee;--mute:#93a3ab;--line:#2a3a43;--teal:#4fc3cd;--sig:#ff7a55;--bar:#2f6a71;--ok:#5fcf93}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:880px;margin:0 auto;padding:18px 16px 40px}
+h1{font:700 34px/1.05 "Barlow Condensed","Arial Narrow",sans-serif;margin:0 0 4px}
+h2{font:700 20px/1.2 "Barlow Condensed","Arial Narrow",sans-serif;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tog button,.btn{font:600 14px Barlow,system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:8px;cursor:pointer}
+.tog button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+:root:not([data-theme="light"]) .tog button[aria-pressed="true"]{color:#06161a}
+button:focus-visible{outline:2px solid var(--sig);outline-offset:2px}
+.big{font:700 44px/1 "Barlow Condensed","Arial Narrow",sans-serif}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.k{border-left:3px solid var(--teal);padding:2px 0 2px 10px}
+.k small{display:block;color:var(--mute)}
+.k .v{font:700 30px/1.1 "Barlow Condensed","Arial Narrow",sans-serif}
+.warn{color:var(--sig)}.good{color:var(--ok)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:460px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600}
+tr.now td{background:color-mix(in srgb,var(--teal) 12%,transparent)}
+svg{width:100%;height:auto;display:block}
+.m{color:var(--mute)}
+details summary{cursor:pointer;font-weight:600}
+:root{--bg:#f3f1fa;--card:#fff;--ink:#141a33;--mute:#5f6580;--line:#dcd8ee;--teal:#5a46d4;--sig:#d63b3b;--bar:#bdb4ee;--ok:#1f8a5b;--gold:#f0ad14;--track:#5a46d4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1124;--card:#171b36;--ink:#ecebfa;--mute:#9a9fc4;--line:#2b3060;--teal:#8f7dff;--sig:#ff6b6b;--bar:#3b3a85;--ok:#5fd29b;--gold:#ffc43d;--track:#372da0}}
+:root[data-theme="dark"]{--bg:#0e1124;--card:#171b36;--ink:#ecebfa;--mute:#9a9fc4;--line:#2b3060;--teal:#8f7dff;--sig:#ff6b6b;--bar:#3b3a85;--ok:#5fd29b;--gold:#ffc43d;--track:#372da0}
+.card{border-radius:14px}
+.k{border-left:4px solid var(--gold);background:var(--bg);padding:8px 10px;border-radius:0 8px 8px 0}
+h2::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--gold);margin-right:8px}
+.hero{background-color:var(--track);background-image:repeating-linear-gradient(0deg,transparent 0 30px,rgba(255,255,255,.25) 30px 32px);color:#fff;border-radius:14px;padding:26px 16px 20px;margin:0 0 6px}
+.bib{background:#fff;color:#141a33;border-radius:8px;max-width:340px;padding:12px 18px 10px;transform:rotate(-1.5deg);box-shadow:0 6px 0 rgba(0,0,0,.18);position:relative;text-align:center}
+.bib i{position:absolute;top:7px;width:9px;height:9px;border-radius:50%;background:var(--track);opacity:.8}
+.bib i:first-child{left:8px}.bib i:nth-child(2){right:8px}
+.bib .bn{font:700 64px/1 "Barlow Condensed","Arial Narrow",sans-serif}
+.bib .bt{font-weight:600}.bib .bs{color:#5f6580;font-size:13px}
+.hs{margin:14px 0 0;opacity:.92}
+.fld{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+.fld label{display:flex;flex-direction:column;font-size:13px;color:var(--mute)}
+.fi{width:96px;font:600 16px Barlow,system-ui,sans-serif;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.out{background:var(--bg);border-left:4px solid var(--gold);padding:10px 12px;border-radius:0 8px 8px 0}
+ul.t{padding-left:18px;margin:6px 0}
+.fj{font:600 15px Barlow,system-ui,sans-serif;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:150px}
+td button{font:600 12px Barlow,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--sig);border-radius:6px;cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+<header class="hero"><div class="bib"><i></i><i></i><div class="bt">Virgin Full Marathon</div><h1 class="bn" style="margin:0">Sub-4</h1><div class="bs">3:59:59 · 5:41/km · 42,195 km</div></div><p class="hs">Data lari dibaca dari Strava. Garmin ikut lewat sync Garmin ke Strava.</p></header>
+
+<section class="card">
+  <div class="row tog" role="group" aria-label="Pilih race target">
+    <button id="bj" aria-pressed="true">Jakarta Running Festival · target utama</button>
+    <button id="bk" aria-pressed="false">BTN Jakim · cadangan</button>
+  </div>
+  <div class="row" style="margin-top:12px;gap:20px">
+    <div><div class="big" id="days">–</div><div class="m" id="rinfo"></div></div>
+    <div class="m" style="flex:1;min-width:220px">Tanggal 2027 belum diumumkan. Saya pakai perkiraan dari pola tahun lalu (JRF Minggu ke-4 Oktober, Jakim Minggu ke-2 Juni). Cek situs resmi dan ubah di sini kalau berbeda: <input type="date" id="dt" aria-label="Tanggal race"></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="row" style="justify-content:space-between">
+    <h2 style="margin:0">Dashboard Strava</h2>
+    <button class="btn" id="reload">Muat ulang</button>
+  </div>
+  <p class="m" id="st">Menyambung ke Strava…</p>
+  <div class="grid" id="kpi"></div>
+</section>
+
+<section class="card">
+  <h2>Volume lari per minggu (12 minggu)</h2>
+  <svg id="chart" viewBox="0 0 600 170" role="img" aria-label="Grafik km per minggu"></svg>
+  <p class="m" id="cnote"></p>
+</section>
+
+<section class="card">
+  <h2 id="wk">Rencana minggu ini</h2>
+  <div class="scroll"><table id="week"></table></div>
+</section>
+
+<section class="card">
+  <h2>Zona pace</h2>
+  <div class="scroll"><table>
+    <tr><th>Jenis</th><th>Pace</th><th>Catatan</th></tr>
+    <tr><td>Easy / recovery</td><td>6:20–6:50/km</td><td>Bisa ngobrol. Di cuaca panas, ikuti heart rate Zone 2, bukan pace.</td></tr>
+    <tr><td>Marathon pace</td><td>5:41/km</td><td>Pace hari-H. Latih di blok panjang saat fase spesifik.</td></tr>
+    <tr><td>Tempo</td><td>5:20–5:30/km</td><td>Terasa keras tapi terkontrol.</td></tr>
+    <tr><td>Interval 1 km</td><td>5:05–5:15/km</td><td>Jog 2 menit antar repetisi.</td></tr>
+  </table></div>
+  <p class="m">Strategi finish strong: lepas 5 km pertama di 5:48–5:50, tahan 5:41 sampai km 32, lalu dorong negative split. Minum dan makan dengan jadwal, jangan fueling berlebihan seperti saat lari panjang Juni.</p>
+</section>
+
+<section class="card">
+  <h2>Tes kebugaran</h2>
+  <ul class="t" id="tests"></ul>
+  <p class="m">Target ini setara marathon sub-4 menurut rumus Riegel. Kalau tes meleset lebih dari 3 menit di half marathon, geser target ke 4:10 dan tetap finish kuat.</p>
+</section>
+
+<section class="card">
+  <h2>Kalkulator fueling hari-H</h2>
+  <div class="fld">
+    <label>Waktu lari (jam)<input class="fi" id="fh" type="number" step="0.05" value="4"></label>
+    <label>Karbo g/jam<input class="fi" id="fc" type="number" value="60"></label>
+    <label>Produk<select class="fi" id="fp" style="width:auto"></select></label>
+    <label>Karbo per sachet (g)<input class="fi" id="fg" type="number" value="25"></label>
+    <label>Cairan ml/jam<input class="fi" id="ff" type="number" value="500"></label>
+    <label>Berat badan (kg)<input class="fi" id="fw" type="number" value="74"></label>
+  </div>
+  <div class="out" id="fout"></div>
+  <div class="out" id="fout2" style="margin-top:8px"></div>
+</section>
+
+<section class="card">
+  <h2>Panduan bahan fueling</h2>
+  <p class="m">Angka karbo kira-kira, cek label kemasan.</p>
+  <div class="scroll"><table>
+    <tr><th>Jenis</th><th>Contoh</th><th>Catatan</th></tr>
+    <tr><td>Gel</td><td>Maurten Gel 100 (25 g), GU (22 g), SiS Beta Fuel (40 g), SiS GO Isotonic (22 g)</td><td>Pilih campuran glukosa + fruktosa (sekitar 2:1) agar bisa serap 60 g/jam atau lebih. Isotonik bisa ditelan tanpa air.</td></tr>
+    <tr><td>Makanan nyata</td><td>Pisang (±26 g), kurma (±17 g/butir), madu sachet, gummy lari</td><td>Murah dan lembut di perut, tapi repot dibawa. Pisang biasanya ada di water station.</td></tr>
+    <tr><td>Carb loading</td><td>Nasi putih, roti putih, kentang, oat, mi</td><td>1–2 hari sebelum race, 8–10 g/kg. Kurangi serat tinggi, gorengan, dan makanan pedas yang belum pernah dicoba.</td></tr>
+    <tr><td>Cairan</td><td>Air putih + isotonik (misalnya Pocari Sweat)</td><td>Di cuaca panas butuh natrium ±300–600 mg/jam. Jangan minum isotonik dan gel pekat sekaligus.</td></tr>
+    <tr><td>Kafein</td><td>Gel berkafein 25–100 mg</td><td>Dipakai setelah km 30. Tes dulu di long run, karena sebagian orang mual atau berdebar.</td></tr>
+  </table></div>
+  <p class="m">Aturan emas: tidak ada produk baru di hari race. Mulai 30 g/jam di long run, naik 5–10 g/jam setiap 1–2 minggu sampai 60 g/jam.</p>
+</section>
+
+<section class="card">
+  <h2>Log fueling long run</h2>
+  <div class="fld">
+    <label>Tanggal<input class="fj" id="lfd" type="date"></label>
+    <label>Jarak (km)<input class="fj" id="lfk" type="number" step="0.1" style="width:80px"></label>
+    <label>Produk<select class="fj" id="lfp"></select></label>
+    <label>Karbo g/jam<input class="fj" id="lfg" type="number" style="width:80px"></label>
+    <label>Perut<select class="fj" id="lfr"><option value="1">1 sangat nyaman</option><option value="2" selected>2 nyaman</option><option value="3">3 biasa saja</option><option value="4">4 agak mual</option><option value="5">5 mual</option></select></label>
+  </div>
+  <div class="row"><button class="btn" id="lfs">Simpan catatan</button><button class="btn" id="lfi">Isi dari lari terakhir Strava</button></div>
+  <div class="scroll"><table id="lft"></table></div>
+  <p class="m">Catatan tersimpan di browser perangkat ini saja.</p>
+</section>
+
+<section class="card">
+  <h2>Pace band negative split</h2>
+  <div class="fld">
+    <label>Target waktu<input class="fi" id="bt" value="3:58:30"></label>
+    <label>Selisih paruh (detik/km)<input class="fi" id="bd" type="number" value="3"></label>
+  </div>
+  <div class="scroll"><table id="band"></table></div>
+</section>
+
+<section class="card">
+  <h2>Aturan asap dan panas</h2>
+  <ul class="t">
+    <li>Udara pekat atau AQI di atas 150: lari di treadmill atau ganti hari istirahat.</li>
+    <li>AQI 100–150 atau panas ekstrem: turunkan intensitas, pakai heart rate, bukan pace.</li>
+    <li>Lari sebelum 06:30 atau setelah 17:00, bawa minum dan elektrolit.</li>
+    <li>Demam atau badan meriang: skip, jangan dikejar. Satu minggu hilang tidak merusak rencana 51 minggu.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Checklist menuju race</h2>
+  <div id="chk"></div>
+</section>
+
+<section class="card">
+  <h2>Seluruh rencana</h2>
+  <details><summary>Buka semua minggu</summary><div class="scroll"><table id="all"></table></div></details>
+</section>
+
+<section class="card">
+  <h2>Sambungkan Garmin</h2>
+  <p>Aplikasi ini membaca data dari Strava. Di Garmin Connect buka <b>Settings → Connected Apps → Strava</b> dan izinkan, supaya setiap lari di jam Garmin otomatis muncul di sini. Sync langsung dari jam ke aplikasi ini tidak bisa dari halaman web.</p>
+</section>
+
+<section class="card">
+  <h2>Lari terbaru</h2>
+  <div class="scroll"><table id="recent"></table></div>
+</section>
+</main>
+
+<script>
+(function(){
+var DAY=864e5, START=new Date(2026,10,2);
+var RACES={jrf:{n:"JRF",d:"2027-10-24",peak:60,long:32},jakim:{n:"Jakim",d:"2027-06-13",peak:54,long:30}};
+var cur="jrf", dates={};
+try{cur=localStorage.getItem("s4race")||"jrf";dates=JSON.parse(localStorage.getItem("s4dates")||"{}")}catch(e){}
+if(!RACES[cur])cur="jrf";
+var acts=null;
+function $(i){return document.getElementById(i)}
+function rd(k){return new Date((dates[k]||RACES[k].d)+"T00:00:00")}
+function nW(k){return Math.floor((rd(k)-START)/(7*DAY))+1}
+function fmtD(d){return d.toLocaleDateString("id-ID",{day:"numeric",month:"short"})}
+function fmtP(s){s=Math.round(s);return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
+function fmtT(s){s=Math.round(s);var h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h+":"+("0"+m).slice(-2)+":"+("0"+s%60).slice(-2)}
+function mon(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+
+function plan(w,k){
+  var R=RACES[cur],N=nW(cur),P=R.peak,L=R.long,x=Math.min(1,Math.max(0,(w-1)/(N-4)));
+  var km,lg,q,ph;
+  if(w>=N-2){ph="Taper";var f=[.7,.5,.3][w-(N-2)];km=P*f;lg=[22,14,0][w-(N-2)]}
+  else{ph=x<.3?"Base":x<.65?"Build":"Spesifik";km=26+(P-26)*x;lg=12+(L-12)*x;
+    if(w%4==0){km*=.8;lg*=.75}}
+  km=Math.round(km);lg=Math.round(Math.min(lg,km*.5));
+  var o=w%2;
+  var t10=Math.round(N*.3),thm=Math.round(N*.62);if(w==N)q="Shakeout 20 menit + 4 strides. Race!";else if(w==t10)q="TES 10K all-out (target ≤ 53:00), pemanasan 2 km";else if(w==thm)q="TES half marathon (target ≤ 1:55, aman ≤ 2:00)";else if(w==N-4)q="Gladi resik: long run terpanjang dengan fueling race";
+  else if(ph=="Taper")q="3×2 km @5:41, sisanya santai";
+  else if(ph=="Base")q=o?"Fartlek 6×2 menit ngebut / 2 menit santai":"Strides 6×20 detik setelah easy run";
+  else if(ph=="Build")q=o?"Tempo 20–30 menit @5:20–5:30":"Interval 5×1 km @5:05–5:15";
+  else q=o?"Marathon pace 2×6 km @5:41":"Easy 8 km, 5 km terakhir @5:41";
+  var lt=ph=="Spesifik"&&lg>=22?" (3–5 km terakhir @5:41)":"";
+  var qk=w==N?6:Math.round(km*.22),rest=Math.max(0,km-lg-qk),e1=Math.round(rest/2);
+  return{ph:ph,km:km,lg:lg,q:q,lt:lt,qk:qk,e1:e1,e2:rest-e1,N:N,race:w==N}
+}
+
+function runs(){return(acts||[]).filter(function(a){return/Run/.test(a.sport_type)})}
+function weekly(){
+  var m={};runs().forEach(function(a){var k=+mon(new Date(a.start_local));m[k]=(m[k]||0)+a.summary.distance/1000});return m}
+
+function render(){
+  var R=RACES[cur],N=nW(cur),rdte=rd(cur),now=new Date();
+  $("bj").setAttribute("aria-pressed",cur=="jrf");$("bk").setAttribute("aria-pressed",cur=="jakim");
+  $("dt").value=(dates[cur]||R.d);
+  var dl=Math.ceil((rdte-now)/DAY);
+  $("days").textContent=dl>0?dl+" hari":"Hari-H";
+  $("rinfo").textContent=R.n+" · "+rdte.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})+" · "+N+" minggu latihan dari "+fmtD(START);
+  var cw=Math.min(N,Math.max(1,Math.floor((mon(now)-START)/(7*DAY))+1)),p=plan(cw);
+  $("wk").textContent="Minggu "+cw+" dari "+N+" · fase "+p.ph+(now<START?" (mulai "+fmtD(START)+")":"");
+  var rows='<tr><th>Hari</th><th>Latihan</th><th>Jarak</th></tr>'+
+   '<tr><td>Senin</td><td>Gym kekuatan 30–40 menit (kaki, core)</td><td>–</td></tr>'+
+   '<tr><td>Selasa</td><td>Easy run</td><td>'+p.e1+' km</td></tr>'+
+   '<tr><td>Rabu</td><td>Istirahat / jalan santai</td><td>–</td></tr>'+
+   '<tr><td>Kamis</td><td>'+p.q+'</td><td>'+p.qk+' km</td></tr>'+
+   '<tr><td>Jumat</td><td>Istirahat</td><td>–</td></tr>'+
+   '<tr><td>Sabtu</td><td>Easy / recovery</td><td>'+p.e2+' km</td></tr>'+
+   '<tr><td>Minggu</td><td>'+(p.race?"RACE":"Long run easy"+p.lt)+'</td><td>'+(p.race?"42,2 km":p.lg+" km")+'</td></tr>'+(p.race?'':'<tr><td>Fueling</td><td>Latih '+fgt(cw)+' g karbo/jam di long run</td><td>–</td></tr>');
+  $("week").innerHTML=rows;
+  var all='<tr><th>Mgg</th><th>Mulai</th><th>Fase</th><th>Total</th><th>Long run</th><th>Kualitas</th></tr>';
+  for(var w=1;w<=N;w++){var q=plan(w);all+='<tr'+(w==cw?' class="now"':'')+'><td>'+w+'</td><td>'+fmtD(new Date(+START+(w-1)*7*DAY))+'</td><td>'+q.ph+'</td><td>'+q.km+' km</td><td>'+(q.race?"Race":q.lg+" km")+'</td><td>'+q.q+'</td></tr>'}
+  $("all").innerHTML=all;
+  kpis(cw,p);extras()
+}
+
+function kpis(cw,p){
+  var k=$("kpi"),ch=$("chart"),rc=$("recent");
+  if(!acts){k.innerHTML="";ch.innerHTML="";rc.innerHTML="";return}
+  var W=weekly(),now=new Date(),m0=+mon(now),i,series=[];
+  for(i=11;i>=0;i--){var d=new Date(m0);d.setDate(d.getDate()-7*i);series.push({d:d,v:W[+d]||0})}
+  var thisW=series[11].v,last4=series.slice(7,11),avg4=last4.reduce(function(s,x){return s+x.v},0)/4;
+  var rs=runs(),cut=+now-28*DAY,r4=rs.filter(function(a){return+new Date(a.start_local)>=cut});
+  var longest=Math.max.apply(null,[0].concat(r4.map(function(a){return a.summary.distance/1000})));
+  var tt=r4.reduce(function(s,a){return s+a.summary.moving_time},0),dd=r4.reduce(function(s,a){return s+a.summary.distance},0);
+  var pace=dd?tt/(dd/1000):0;
+  var best=null;rs.forEach(function(a){var d=a.summary.distance;if(d>=10000){var t=a.summary.moving_time*Math.pow(42195/d,1.06);if(!best||t<best.t)best={t:t,d:d}}});
+  var gap=best?best.t-14400:0;
+  var ramp=avg4>0&&thisW>avg4*1.3;var stk=0;for(i=10;i>=0&&series[i].v>=15;i--)stk++;
+  k.innerHTML=
+   '<div class="k"><small>Minggu ini</small><span class="v">'+thisW.toFixed(1)+' km</span><small>target '+p.km+' km</small></div>'+
+   '<div class="k"><small>Rata-rata 4 minggu</small><span class="v">'+avg4.toFixed(1)+' km</span><small class="'+(avg4<p.km*.8?"warn":"good")+'">'+(avg4<p.km*.8?"di bawah target minggu ini":"sesuai jalur")+'</small></div>'+
+   '<div class="k"><small>Long run terpanjang (4 mgg)</small><span class="v">'+longest.toFixed(1)+' km</span><small>target minggu ini '+(p.race?"race":p.lg+" km")+'</small></div>'+
+   '<div class="k"><small>Pace rata-rata (4 mgg)</small><span class="v">'+(pace?fmtP(pace):"–")+'/km</span><small>pace sub-4: 5:41/km</small></div>'+
+   '<div class="k"><small>Prediksi marathon</small><span class="v">'+(best?fmtT(best.t):"–")+'</span><small class="'+(gap>0?"warn":"good")+'">'+(best?(gap>0?"kurang "+Math.round(gap/60)+" menit dari sub-4":"sudah sub-4 di atas kertas"):"butuh lari ≥ 10 km")+'</small></div>'+
+   '<div class="k"><small>Frekuensi lari (4 mgg)</small><span class="v">'+(r4.length/4).toFixed(1)+'×/minggu</span><small>target 4×/minggu</small></div>'+
+   '<div class="k"><small>Streak minggu ≥ 15 km</small><span class="v">'+stk+' mgg</span><small>'+(stk>=4?"konsisten, pertahankan":"bangun kebiasaannya dulu")+'</small></div>';
+  $("cnote").textContent=(ramp?"Lonjakan volume lebih dari 30% di atas rata-rata 4 minggu. Naikkan bertahap supaya aman dari cedera. ":"")+"Prediksi memakai rumus Riegel dari lari terbaikmu ≥ 10 km dalam periode yang dimuat, jadi hanya perkiraan kasar.";
+  var mx=Math.max(20,p.km+5,Math.max.apply(null,series.map(function(x){return x.v}))),s="",bw=38,H=130;
+  series.forEach(function(x,j){var h=x.v/mx*H,X=14+j*48;
+    s+='<rect x="'+X+'" y="'+(H-h+10)+'" width="'+bw+'" height="'+h+'" rx="3" fill="'+(j==11?'var(--teal)':'var(--bar)')+'"/>'+
+    '<text x="'+(X+bw/2)+'" y="'+(H-h+5)+'" text-anchor="middle" font-size="11" fill="var(--ink)">'+Math.round(x.v)+'</text>'+
+    '<text x="'+(X+bw/2)+'" y="160" text-anchor="middle" font-size="10" fill="var(--mute)">'+x.d.getDate()+"/"+(x.d.getMonth()+1)+'</text>'});
+  var ty=H-p.km/mx*H+10;
+  s+='<line x1="8" x2="592" y1="'+ty+'" y2="'+ty+'" stroke="var(--sig)" stroke-dasharray="5 4"/><text x="592" y="'+(ty-4)+'" text-anchor="end" font-size="11" fill="var(--sig)">target '+p.km+' km</text>';
+  ch.innerHTML=s;
+  var h='<tr><th>Tanggal</th><th>Jarak</th><th>Waktu</th><th>Pace</th></tr>';
+  rs.slice(0,8).forEach(function(a){var d=a.summary.distance/1000;h+='<tr><td>'+fmtD(new Date(a.start_local))+'</td><td>'+d.toFixed(1)+' km</td><td>'+fmtT(a.summary.moving_time)+'</td><td>'+fmtP(a.summary.moving_time/d)+'/km</td></tr>'});
+  rc.innerHTML=h
+}
+
+var CH=["Sepatu race sudah dipakai ≥ 80 km, bukan sepatu baru","Gel dan minuman race sudah dites di long run ≥ 25 km","Gladi resik long run selesai","Tes half marathon selesai","Pendaftaran dan jadwal ambil racepack dicek","Rute dan titik water station dipelajari","Penginapan dekat start dan finish dipesan","Carb loading 2 hari sebelum race direncanakan","Pace band diset di jam Garmin atau dicetak","Tidur cukup 3 malam sebelum race"];
+function V(i){return+$(i).value}
+function extras(){
+  var N=nW(cur),t10=Math.round(N*.3),thm=Math.round(N*.62),wd=function(w){return fmtD(new Date(+START+(w-1)*7*DAY))};
+  var jw=Math.floor((rd("jakim")-START)/(7*DAY))+1;
+  $("tests").innerHTML='<li>Minggu '+t10+' ('+wd(t10)+'): tes 10K, target ≤ 53:00</li><li>Minggu '+thm+' ('+wd(thm)+'): tes half marathon, target ≤ 1:55 (aman ≤ 2:00)</li><li>Minggu '+(N-4)+' ('+wd(N-4)+'): gladi resik long run dan fueling race</li>'+(cur=="jrf"&&jw>0&&jw<N?'<li>BTN Jakim punya kategori half marathon sekitar minggu '+jw+', cocok jadi tes HM resmi.</li>':'');
+  var h=V("fh"),c=V("fc"),g=V("fg")||25,f=V("ff"),tot=h*c;
+  $("fout").innerHTML='Total karbo <b>'+Math.round(tot)+' g</b>, sekitar <b>'+Math.ceil(tot/g)+' gel</b> ('+g+' g). 1 gel tiap <b>'+(c?Math.round(g/c*60):0)+' menit</b>, mulai menit ke-25. Cairan <b>'+(h*f/1000).toFixed(1)+' L</b> total, ±'+Math.round(f/4)+' ml tiap 15 menit.';
+  var tp=$("bt").value.split(":").map(Number),T=(tp[0]||0)*3600+(tp[1]||0)*60+(tp[2]||0),d=V("bd"),b=$("band");
+  if(T>9000){var av=T/42.195,p1=av+d,p2=av-d,hm=21.0975,cum=function(x){return x<=hm?x*p1:hm*p1+(x-hm)*p2},r='<tr><th>Km</th><th>Waktu</th><th>Pace segmen</th></tr>';
+    [5,10,15,20,21.0975,25,30,35,40,42.195].forEach(function(x){r+='<tr><td>'+(x==hm?"21,1 (HM)":x==42.195?"42,2 (finish)":x)+'</td><td>'+fmtT(cum(x))+'</td><td>'+fmtP(x<=hm?p1:p2)+'/km</td></tr>'});b.innerHTML=r}else b.innerHTML='<tr><td>Isi target waktu, contoh 3:58:30</td></tr>';
+  var ck={};try{ck=JSON.parse(localStorage.getItem("s4chk")||"{}")}catch(e){}
+  $("chk").innerHTML=CH.map(function(t,i){return'<label style="display:block;padding:4px 0"><input type="checkbox" data-i="'+i+'"'+(ck[i]?' checked':'')+'> '+t+'</label>'}).join("");fuel2()
+}
+var PR=[["Maurten Gel 100",25],["GU Energy Gel",22],["SiS Beta Fuel",40],["SiS GO Isotonic",22],["Pisang",26],["Kurma",17],["Lainnya",""]];
+var RT=["","sangat nyaman","nyaman","biasa","agak mual","mual"];
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function lg(){try{var a=JSON.parse(localStorage.getItem("s4fuel")||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function sv(a){try{localStorage.setItem("s4fuel",JSON.stringify(a))}catch(e){}}
+function fgt(w){var N=nW(cur);return Math.min(60,Math.max(30,Math.round((30+30*(w-1)/(.6*(N-3)))/5)*5))}
+function saveLog(){var d=$("lfd").value,k=+$("lfk").value,g=+$("lfg").value;if(!d||!k||!g)return;var a=lg();a.push({d:d,k:k,g:g,p:$("lfp").value,r:+$("lfr").value});a.sort(function(x,y){return x.d<y.d?-1:1});sv(a);fuel2()}
+function fillLast(){var r=runs().filter(function(a){return a.summary.distance>=12000}).sort(function(a,b){return a.start_local<b.start_local?1:-1})[0];if(!r){$("st").textContent="Belum ada lari ≥ 12 km dari Strava untuk diisi.";return}$("lfd").value=r.start_local.slice(0,10);$("lfk").value=(r.summary.distance/1000).toFixed(1)}
+function fuel2(){
+  var now=new Date(),cw=Math.min(nW(cur),Math.max(1,Math.floor((mon(now)-START)/(7*DAY))+1)),a=lg(),wt=V("fw")||70,safe=0;
+  a.forEach(function(x){if(x.r<=2&&x.g>safe)safe=x.g});
+  var l=a[a.length-1],t=fgt(cw),adv="Belum ada catatan. Mulai di "+t+" g/jam dan catat rasa perutmu.";
+  if(l)adv=l.r>=4?"Perutmu protes di "+l.g+" g/jam. Turunkan 10 g/jam di long run berikutnya.":(l.r<=2&&l.g<t?"Perut nyaman di "+l.g+" g/jam. Naikkan 5–10 g/jam ke arah "+t+".":"Pertahankan "+l.g+" g/jam sampai dua long run beruntun terasa nyaman.");
+  $("fout2").innerHTML='Target long run minggu ini: <b>'+t+' g karbo/jam</b> (naik bertahap ke 60). Dosis nyaman tertinggi tercatat: <b>'+(safe?safe+" g/jam":"–")+'</b>. '+adv+'<br>Carb loading 1–2 hari sebelum race: <b>'+Math.round(wt*8)+'–'+Math.round(wt*10)+' g karbo/hari</b>.';
+  var h='<tr><th>Tanggal</th><th>Km</th><th>Produk</th><th>g/jam</th><th>Perut</th><th></th></tr>';
+  for(var i=a.length-1;i>=Math.max(0,a.length-10);i--){var x=a[i];h+='<tr><td>'+esc(x.d)+'</td><td>'+esc(x.k)+'</td><td>'+esc(x.p)+'</td><td>'+esc(x.g)+'</td><td>'+esc(RT[x.r]||"")+'</td><td><button data-del="'+i+'">Hapus</button></td></tr>'}
+  $("lft").innerHTML=a.length?h:'<tr><td>Belum ada catatan fueling.</td></tr>'
+}
+var unsub=null;
+function load(){
+  var st=$("st");
+  if(unsub){try{unsub()}catch(e){}unsub=null}
+  if(!window.claude||!claude.use){st.textContent="Halaman ini harus dibuka di claude.ai agar bisa membaca Strava.";return}
+  claude.use("mcp").then(function(mcp){
+    if(!mcp){st.textContent="Sambungan ke Strava tidak tersedia di tampilan ini. Buka halaman ini di claude.ai dan pastikan konektor Strava aktif.";return}
+    var from=new Date(Date.now()-150*DAY),iso=from.getFullYear()+"-"+("0"+(from.getMonth()+1)).slice(-2)+"-"+("0"+from.getDate()).slice(-2)+"T00:00:00";
+    unsub=mcp.watchTool("Strava","list_activities",{first:100,range_start:iso},function(ev){
+      if(ev.type=="data"){
+        var pl=ev.result&&ev.result.payload;
+        if(pl&&pl.activities){acts=pl.activities;st.textContent="Strava terhubung · "+runs().length+" lari dimuat"+(ev.result.cache?" · diperbarui "+new Date(ev.result.cache.storedAt).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}):"");render()}
+        else st.textContent="Strava membalas dalam format yang tidak dikenali."
+      }else{
+        var c=ev.error&&ev.error.code;
+        if(c=="needs_reauth"||c=="server_not_connected"){acts=null;st.textContent="Strava belum terhubung atau perlu login ulang. Hubungkan konektor Strava di pengaturan Claude, lalu tekan Muat ulang.";render()}
+        else if(c=="approval_required"||c=="not_granted")st.textContent="Izin akses Strava belum diberikan. Setujui permintaan izin dari claude.ai, lalu tekan Muat ulang.";
+        else st.textContent="Gagal memuat Strava (kode: "+(c||"tidak diketahui")+"). Tekan Muat ulang untuk mencoba lagi."
+      }
+    },{refetchInterval:300000})
+  }).catch(function(){st.textContent="Gagal menyiapkan sambungan Strava. Tekan Muat ulang."})
+}
+
+function setRace(k){cur=k;try{localStorage.setItem("s4race",k)}catch(e){}render()}
+$("bj").onclick=function(){setRace("jrf")};$("bk").onclick=function(){setRace("jakim")};
+$("dt").onchange=function(){if(this.value){dates[cur]=this.value;try{localStorage.setItem("s4dates",JSON.stringify(dates))}catch(e){}render()}};
+$("reload").onclick=load;
+["fp","lfp"].forEach(function(id){PR.forEach(function(p){var o=document.createElement("option");o.value=id=="fp"?p[1]:p[0];o.textContent=p[0]+(p[1]?" ("+p[1]+" g)":"");$(id).appendChild(o)})});
+$("fp").value=25;
+Array.prototype.forEach.call(document.querySelectorAll(".fi"),function(e){e.oninput=extras;e.onchange=extras});
+$("fp").onchange=function(){if(this.value)$("fg").value=this.value;extras()};
+var td=new Date();$("lfd").value=td.getFullYear()+"-"+("0"+(td.getMonth()+1)).slice(-2)+"-"+("0"+td.getDate()).slice(-2);
+$("lfs").onclick=saveLog;$("lfi").onclick=fillLast;
+$("lft").onclick=function(e){var i=e.target.getAttribute("data-del");if(i===null)return;var a=lg();a.splice(+i,1);sv(a);fuel2()};
+$("chk").onchange=function(e){var i=e.target.getAttribute("data-i"),ck={};try{ck=JSON.parse(localStorage.getItem("s4chk")||"{}");ck[i]=e.target.checked;localStorage.setItem("s4chk",JSON.stringify(ck))}catch(x){}};
+render();load();
+})();
+</script>
+</body>
+</html>
