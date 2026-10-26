@@ -442,7 +442,73 @@ function errMsg(e){
   if(c==="tool_error") return {code:c, msg:"Strava menolak permintaan. Pastikan langganan Strava aktif, lalu coba lagi."};
   return {code:c||"unknown", msg:"Data Strava belum bisa dimuat ("+(c||"tidak diketahui")+")."};
 }
-var snapMsg="";
+var snapMsg="", tokMsg="";
+var STRAVA_ID="291086";
+function loadTok(){ try{ var o=JSON.parse(store("sub4.tok")||"null"); if(o && o.rt) return o; }catch(e){} return null; }
+function saveTok(o){ store("sub4.tok", JSON.stringify(o)); }
+function redirectUri(){ return location.origin+location.pathname; }
+function connectStrava(){
+  var el=document.getElementById("stSecret"), sec=el?el.value.trim():"";
+  var prev=loadTok()||{}, cs=sec||prev.cs||store("sub4.cs")||"";
+  store("sub4.cs", cs);
+  location.href="https://www.strava.com/oauth/authorize?client_id="+STRAVA_ID+"&redirect_uri="+encodeURIComponent(redirectUri())+"&response_type=code&approval_prompt=auto&scope="+encodeURIComponent("read,activity:read_all");
+}
+async function tokenReq(params, cs){
+  try{
+    var r=await fetch("/api/token",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(params)});
+    if(r.ok && (r.headers.get("content-type")||"").indexOf("json")>=0) return await r.json();
+  }catch(e){}
+  if(!cs) throw {code:"no_secret"};
+  var body=new URLSearchParams(Object.assign({client_id:STRAVA_ID, client_secret:cs}, params)), r2;
+  try{ r2=await fetch("https://www.strava.com/oauth/token",{method:"POST",body:body}); }catch(e){ throw {code:"cors"}; }
+  if(!r2.ok) throw {code:"auth_"+r2.status};
+  return await r2.json();
+}
+function directErr(e){
+  var c=e&&e.code;
+  if(c==="no_secret") return "Client Secret belum diisi. Isi di kotak Client Secret, lalu tekan Hubungkan Strava lagi.";
+  if(c==="cors") return "Browser tidak bisa menghubungi Strava langsung (diblokir). Perlu perantara kecil di Vercel; kabari Claude.";
+  if(c==="auth_400"||c==="auth_401") return "Strava menolak kode atau Client Secret. Periksa Client Secret, lalu Hubungkan ulang.";
+  if(c==="auth_429"||c==="http_429") return "Batas permintaan Strava tercapai. Coba lagi beberapa menit lagi.";
+  return "Gagal menghubungi Strava ("+(c||"jaringan")+"). Coba lagi.";
+}
+async function handleCallback(){
+  var q=new URLSearchParams(location.search), code=q.get("code");
+  if(!code && !q.get("error")) return;
+  try{ history.replaceState(null,"",location.pathname); }catch(e){}
+  if(q.get("error")){ tokMsg="Izin Strava ditolak."; return; }
+  if((q.get("scope")||"").indexOf("activity:read")<0){ tokMsg="Izin 'lihat data aktivitas' tidak dicentang. Hubungkan ulang dan centang semua izin."; return; }
+  try{
+    var t=await tokenReq({grant_type:"authorization_code", code:code}, store("sub4.cs")||"");
+    var a=t.athlete||{};
+    saveTok({at:t.access_token, rt:t.refresh_token, exp:t.expires_at, cs:store("sub4.cs")||"", name:[a.firstname,a.lastname].filter(Boolean).join(" ")});
+    tokMsg="Strava tersambung.";
+  }catch(e){ tokMsg=directErr(e); }
+}
+async function getAccess(){
+  var tok=loadTok(); if(!tok) throw {code:"no_token"};
+  if(tok.exp && tok.exp-120 < Date.now()/1000){
+    var t=await tokenReq({grant_type:"refresh_token", refresh_token:tok.rt}, tok.cs||"");
+    tok.at=t.access_token; tok.rt=t.refresh_token||tok.rt; tok.exp=t.expires_at; saveTok(tok);
+  }
+  return tok.at;
+}
+async function directSync(){
+  try{
+    var at=await getAccess(), tok=loadTok(), all=[], after=Math.floor((weekStart(1)-28*DAY)/1000);
+    for(var pg=1; pg<=15; pg++){
+      var r; try{ r=await fetch("https://www.strava.com/api/v3/athlete/activities?after="+after+"&per_page=100&page="+pg,{headers:{Authorization:"Bearer "+at}}); }catch(e){ throw {code:"cors"}; }
+      if(r.status===401) throw {code:"auth_401"};
+      if(!r.ok) throw {code:"http_"+r.status};
+      var list=await r.json();
+      list.forEach(function(a){ all.push({id:a.id, date:String(a.start_date_local||"").slice(0,10), type:a.sport_type||a.type, km:(a.distance||0)/1000, sec:a.moving_time||0, re:a.suffer_score||0}); });
+      if(list.length<100) break;
+    }
+    S.acts=all; indexActs(); S.profile={name:tok.name||""};
+    S.sync={state:"ok", msg:"", at:Date.now(), code:"direct"};
+  }catch(e){ S.sync={state:"error", msg:directErr(e), at:S.sync.at, code:(e&&e.code)||"err"}; }
+  renderAll();
+}
 function loadSnapStore(){ try{ var o=JSON.parse(store("sub4.snap")||"null"); if(o && Array.isArray(o.acts)) return o; }catch(e){} return null; }
 function snapCopyText(){ return JSON.stringify({v:1, at:S.sync.at||Date.now(), race:S.set.race, acts:S.acts.map(function(a){ return [a.date,a.type,Math.round(a.km*100)/100,a.sec,a.re||0]; })}); }
 function snapParse(t){
@@ -463,7 +529,9 @@ async function sync(refresh){
   if(!S.set.strava){ S.sync={state:"off", msg:"Sinkron Strava dimatikan di Pengaturan.", at:null, code:"off"}; renderAll(); return; }
   S.sync={state:"loading", msg:"Mengambil aktivitas dari Strava…", at:S.sync.at, code:""}; renderAll();
   var mcp = await getMcp();
+  S.hasMcp=!!mcp;
   if(!mcp){
+    if(loadTok()){ await directSync(); return; }
     var sn=loadSnapStore();
     if(sn){ S.acts=sn.acts; indexActs(); S.sync={state:"ok", msg:"", at:sn.at, code:"snap"}; renderAll(); return; }
     S.sync={state:"na", msg:"Sinkron Strava hanya jalan saat halaman dibuka di aplikasi Claude. Di sini kamu bisa menandai sesi secara manual, atau tempel salinan data di Pengaturan.", at:null, code:"na"}; renderAll(); return; }
@@ -761,6 +829,15 @@ function renderSet(){
      '<div class="btnrow"><a class="btn ghost sm" href="https://www.strava.com/settings/apps" target="_blank" rel="noopener noreferrer">Buka pengaturan aplikasi Strava</a></div></div>';
 
   var fromSnap = S.sync.code==="snap";
+  if(!S.hasMcp){
+    var tk=loadTok();
+    h+='<div class="card"><div class="card-h"><h2>Hubungkan Strava langsung</h2>'+(tk?'<span class="pill good"><i class="dot"></i>Tersambung</span>':'<span class="pill warn"><i class="dot"></i>Belum</span>')+'</div>'+
+       (tokMsg?'<div class="status" role="status">'+esc(tokMsg)+'</div>':'')+
+       (tk?'<p class="note">Tersambung'+(tk.name?' sebagai <b>'+esc(tk.name)+'</b>':'')+'. Aktivitas dibaca otomatis tiap aplikasi dibuka atau saat Sinkron ditekan.</p>':
+          '<p class="note">Login sekali ke Strava, lalu aktivitas dibaca otomatis tanpa salin-tempel. Isi Client Secret dari strava.com/settings/api. Rahasia ini hanya disimpan di browser perangkat ini.</p><div class="fld"><label for="stSecret">Client Secret Strava</label><input id="stSecret" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Tempel Client Secret"></div>')+
+       '<div class="btnrow">'+(tk?'<button class="btn ghost" data-act="tok-copy">Salin sambungan</button><button class="btn ghost" data-act="tok-off">Putuskan</button>':'<button class="btn" data-act="tok-on">Hubungkan Strava</button>')+'</div>'+
+       '<p class="note">Bila aplikasi layar utama di iPhone membuka login di jendela terpisah dan sambungan tidak tersimpan, hubungkan lewat Safari, tekan Salin sambungan, lalu tempel di kotak "Tempel data" di bawah pada aplikasi layar utama.</p></div>';
+  }
   h+='<div class="card"><h3>Pindahkan data Strava ke aplikasi di layar utama</h3>'+
      '<p class="note">Aplikasi yang dipasang di layar utama tidak bisa membaca Strava langsung. Caranya: buka halaman ini di aplikasi Claude, tekan Sinkron, lalu tekan Salin data. Buka aplikasi di layar utama, tempel di kotak di bawah, lalu tekan Muat data. Ulangi kapan saja ingin memperbarui.</p>'+
      (S.sync.code==="snap" ? '<div class="status">Memakai salinan data tanggal '+new Date(S.sync.at).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+' ('+S.acts.length+' aktivitas).</div>' : '')+
@@ -811,6 +888,14 @@ document.addEventListener("click", function(e){
   if(act==="perm-reset"){ delete S.perm[S.sel]; savePerm(); S.swapFrom=null; renderDash(); renderPlan(); return; }
   if(act==="gocur"){ S.sel=curWeek(); renderDash(); renderPlan(); return; }
   if(act==="toggle"){ if(S.manual[v]) delete S.manual[v]; else S.manual[v]=1; store("sub4.manual", JSON.stringify(S.manual)); renderDash(); renderPlan(); return; }
+  if(act==="tok-on"){ connectStrava(); return; }
+  if(act==="tok-off"){ try{ localStorage.removeItem("sub4.tok"); localStorage.removeItem("sub4.cs"); }catch(e){} S.acts=[]; indexActs(); S.profile=null; S.sync={state:"idle", msg:"", at:null, code:""}; tokMsg="Sambungan diputus di perangkat ini. Untuk mencabut akses sepenuhnya, buka strava.com/settings/apps."; renderAll(); return; }
+  if(act==="tok-copy"){
+    var tt=JSON.stringify({v:2, tok:loadTok()});
+    var dn=function(ok){ tokMsg= ok ? "Sambungan tersalin. Tempel di aplikasi layar utama." : "Gagal menyalin otomatis."; renderSet(); };
+    try{ navigator.clipboard.writeText(tt).then(function(){ dn(true); }, function(){ dn(false); }); }catch(e){ dn(false); }
+    return;
+  }
   if(act==="snapcopy"){
     var txt=snapCopyText();
     var done=function(ok){ snapMsg= ok ? "Data tersalin ("+S.acts.length+" aktivitas). Tempel di aplikasi layar utama." : "Gagal menyalin otomatis. Tekan lama kotak di bawah, pilih Salin."; if(!ok){ var ta=document.getElementById("snapIn"); if(ta){ ta.value=txt; ta.focus(); ta.select(); } } renderSet(); if(!ok){ var t2=document.getElementById("snapIn"); if(t2){ t2.value=txt; t2.focus(); t2.select(); } } };
@@ -819,6 +904,8 @@ document.addEventListener("click", function(e){
   }
   if(act==="snapload"){
     var ta=document.getElementById("snapIn"), val=ta?ta.value:"";
+    var pj=null; try{ pj=JSON.parse(String(val).trim()); }catch(e){}
+    if(pj && pj.v===2 && pj.tok && pj.tok.rt){ saveTok(pj.tok); tokMsg="Sambungan Strava dimuat."; snapMsg="Sambungan dimuat."; renderAll(); sync(true); return; }
     try{ var o=snapParse(val); store("sub4.snap", JSON.stringify(o)); S.acts=o.acts; indexActs(); S.sync={state:"ok", msg:"", at:o.at, code:"snap"}; snapMsg="Data dimuat: "+o.acts.length+" aktivitas."; }
     catch(e){ snapMsg="Data tidak dikenali. Pastikan menempel hasil Salin data dari aplikasi Claude."; }
     renderAll(); return;
@@ -879,8 +966,11 @@ document.getElementById("logo").src = ICON192;
 })();
 
 renderAll();
-if(S.set.strava && S.set.auto) sync(false);
-else if(!S.set.strava) sync(false);
+handleCallback().then(function(){
+  if(S.set.strava && (S.set.auto || loadTok() && tokMsg==="Strava tersambung.")) sync(false);
+  else if(!S.set.strava) sync(false);
+  else renderAll();
+});
 })();
 </script>
 
