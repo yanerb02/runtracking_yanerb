@@ -442,6 +442,14 @@ function errMsg(e){
   if(c==="tool_error") return {code:c, msg:"Strava menolak permintaan. Pastikan langganan Strava aktif, lalu coba lagi."};
   return {code:c||"unknown", msg:"Data Strava belum bisa dimuat ("+(c||"tidak diketahui")+")."};
 }
+var snapMsg="";
+function loadSnapStore(){ try{ var o=JSON.parse(store("sub4.snap")||"null"); if(o && Array.isArray(o.acts)) return o; }catch(e){} return null; }
+function snapCopyText(){ return JSON.stringify({v:1, at:S.sync.at||Date.now(), race:S.set.race, acts:S.acts.map(function(a){ return [a.date,a.type,Math.round(a.km*100)/100,a.sec,a.re||0]; })}); }
+function snapParse(t){
+  var o=JSON.parse(String(t).trim());
+  if(!o || o.v!==1 || !Array.isArray(o.acts)) throw 0;
+  return {v:1, at:+o.at||Date.now(), acts:o.acts.map(function(r,i){ return {id:"s"+i, date:String(r[0]), type:String(r[1]), km:+r[2]||0, sec:+r[3]||0, re:+r[4]||0}; })};
+}
 function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
 async function call(mcp, tool, input, refresh){
   var opts = refresh ? {cache:{refresh:true, staleTime:0}} : undefined;
@@ -455,7 +463,10 @@ async function sync(refresh){
   if(!S.set.strava){ S.sync={state:"off", msg:"Sinkron Strava dimatikan di Pengaturan.", at:null, code:"off"}; renderAll(); return; }
   S.sync={state:"loading", msg:"Mengambil aktivitas dari Strava…", at:S.sync.at, code:""}; renderAll();
   var mcp = await getMcp();
-  if(!mcp){ S.sync={state:"na", msg:"Sinkron Strava hanya jalan saat halaman dibuka di aplikasi Claude. Di sini kamu bisa menandai sesi secara manual.", at:null, code:"na"}; renderAll(); return; }
+  if(!mcp){
+    var sn=loadSnapStore();
+    if(sn){ S.acts=sn.acts; indexActs(); S.sync={state:"ok", msg:"", at:sn.at, code:"snap"}; renderAll(); return; }
+    S.sync={state:"na", msg:"Sinkron Strava hanya jalan saat halaman dibuka di aplikasi Claude. Di sini kamu bisa menandai sesi secara manual, atau tempel salinan data di Pengaturan.", at:null, code:"na"}; renderAll(); return; }
   try{
     var all=[], after=null, page=0, firstAt=null;
     var from = ymd(weekStart(1)-28*DAY)+"T00:00:00";
@@ -749,6 +760,15 @@ function renderSet(){
      '<p class="note">Halaman ini hanya membaca data (aktivitas, zona, profil) dan tidak bisa mengubah akun Strava. Memutus sambungan sepenuhnya dilakukan di claude.ai, Pengaturan, Konektor, Strava. Tombol Kelola izin membuka panel izin artifact ini.</p>'+
      '<div class="btnrow"><a class="btn ghost sm" href="https://www.strava.com/settings/apps" target="_blank" rel="noopener noreferrer">Buka pengaturan aplikasi Strava</a></div></div>';
 
+  var fromSnap = S.sync.code==="snap";
+  h+='<div class="card"><h3>Pindahkan data Strava ke aplikasi di layar utama</h3>'+
+     '<p class="note">Aplikasi yang dipasang di layar utama tidak bisa membaca Strava langsung. Caranya: buka halaman ini di aplikasi Claude, tekan Sinkron, lalu tekan Salin data. Buka aplikasi di layar utama, tempel di kotak di bawah, lalu tekan Muat data. Ulangi kapan saja ingin memperbarui.</p>'+
+     (S.sync.code==="snap" ? '<div class="status">Memakai salinan data tanggal '+new Date(S.sync.at).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+' ('+S.acts.length+' aktivitas).</div>' : '')+
+     (snapMsg?'<div class="status" role="status">'+esc(snapMsg)+'</div>':'')+
+     '<div class="btnrow"><button class="btn ghost" data-act="snapcopy" '+(S.acts.length && !fromSnap?'':'disabled')+'>Salin data</button>'+(fromSnap?'<button class="btn ghost" data-act="snapclear">Hapus salinan</button>':'')+'</div>'+
+     '<div class="fld"><label for="snapIn">Tempel data di sini</label><textarea id="snapIn" rows="3" placeholder="Tempel hasil Salin data" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:16px"></textarea></div>'+
+     '<div class="btnrow"><button class="btn" data-act="snapload">Muat data</button></div></div>';
+
   h+='<div class="card"><div class="card-h"><h2>Garmin</h2>'+(S.set.garmin?'<span class="pill good"><i class="dot"></i>Lewat Strava</span>':'<span class="pill warn"><i class="dot"></i>Belum dikonfirmasi</span>')+'</div>'+
      '<p>Tidak ada konektor Garmin langsung. Data jam Garmin masuk ke dasbor lewat Strava: jam sinkron ke Garmin Connect, Garmin Connect mengirim ke Strava, lalu halaman ini membaca Strava.</p>'+
      '<ol class="steps"><li>Buka Garmin Connect, Pengaturan, Aplikasi Terhubung, pilih Strava, lalu Hubungkan.</li><li>Di Strava, Pengaturan, Aplikasi Saya, pastikan Garmin Connect muncul.</li><li>Selesai lari, sinkronkan jam. Aktivitas muncul di Strava dalam beberapa menit, lalu tekan Sinkron di sini.</li></ol>'+
@@ -791,6 +811,19 @@ document.addEventListener("click", function(e){
   if(act==="perm-reset"){ delete S.perm[S.sel]; savePerm(); S.swapFrom=null; renderDash(); renderPlan(); return; }
   if(act==="gocur"){ S.sel=curWeek(); renderDash(); renderPlan(); return; }
   if(act==="toggle"){ if(S.manual[v]) delete S.manual[v]; else S.manual[v]=1; store("sub4.manual", JSON.stringify(S.manual)); renderDash(); renderPlan(); return; }
+  if(act==="snapcopy"){
+    var txt=snapCopyText();
+    var done=function(ok){ snapMsg= ok ? "Data tersalin ("+S.acts.length+" aktivitas). Tempel di aplikasi layar utama." : "Gagal menyalin otomatis. Tekan lama kotak di bawah, pilih Salin."; if(!ok){ var ta=document.getElementById("snapIn"); if(ta){ ta.value=txt; ta.focus(); ta.select(); } } renderSet(); if(!ok){ var t2=document.getElementById("snapIn"); if(t2){ t2.value=txt; t2.focus(); t2.select(); } } };
+    try{ navigator.clipboard.writeText(txt).then(function(){ done(true); }, function(){ done(false); }); }catch(e){ done(false); }
+    return;
+  }
+  if(act==="snapload"){
+    var ta=document.getElementById("snapIn"), val=ta?ta.value:"";
+    try{ var o=snapParse(val); store("sub4.snap", JSON.stringify(o)); S.acts=o.acts; indexActs(); S.sync={state:"ok", msg:"", at:o.at, code:"snap"}; snapMsg="Data dimuat: "+o.acts.length+" aktivitas."; }
+    catch(e){ snapMsg="Data tidak dikenali. Pastikan menempel hasil Salin data dari aplikasi Claude."; }
+    renderAll(); return;
+  }
+  if(act==="snapclear"){ try{ localStorage.removeItem("sub4.snap"); }catch(e){} S.acts=[]; indexActs(); S.sync={state:"idle", msg:"", at:null, code:""}; snapMsg="Salinan dihapus."; renderAll(); return; }
   if(act==="sync"){ sync(true); return; }
   if(act==="test"){ testConn(); return; }
   if(act==="perms"){ managePerms(); return; }
