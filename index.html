@@ -451,7 +451,7 @@ function connectStrava(){
   var el=document.getElementById("stSecret"), sec=el?el.value.trim():"";
   var prev=loadTok()||{}, cs=sec||prev.cs||store("sub4.cs")||"";
   store("sub4.cs", cs);
-  location.href="https://www.strava.com/oauth/authorize?client_id="+STRAVA_ID+"&redirect_uri="+encodeURIComponent(redirectUri())+"&response_type=code&approval_prompt=auto&scope="+encodeURIComponent("read,activity:read_all");
+  location.href="https://www.strava.com/oauth/authorize?client_id="+STRAVA_ID+"&redirect_uri="+encodeURIComponent(redirectUri())+"&response_type=code&approval_prompt=auto&scope="+encodeURIComponent("read,activity:read_all,profile:read_all");
 }
 async function tokenReq(params, cs){
   try{
@@ -505,6 +505,10 @@ async function directSync(){
       if(list.length<100) break;
     }
     S.acts=all; indexActs(); S.profile={name:tok.name||""};
+    try{
+      var zr=await fetch("https://www.strava.com/api/v3/athlete/zones",{headers:{Authorization:"Bearer "+at}});
+      if(zr.ok){ var zj=await zr.json(), hz=(zj.heart_rate&&zj.heart_rate.zones)||[]; if(hz.length) S.zones={heart_rate_zones:hz, run_zones:null, run_zone_source:"hr_only"}; }
+    }catch(e){}
     S.sync={state:"ok", msg:"", at:Date.now(), code:"direct"};
   }catch(e){ S.sync={state:"error", msg:directErr(e), at:S.sync.at, code:(e&&e.code)||"err"}; }
   renderAll();
@@ -745,17 +749,18 @@ function renderPlan(){
 
 function zonesCard(){
   var z=S.zones;
-  if(!z || !z.run_zones) return '<div class="empty">Zona detak jantung dan pace dari akun Strava-mu tampil di sini setelah sinkron berhasil.</div>';
+  if(!z || (!z.run_zones && !z.heart_rate_zones)) return '<div class="empty">Zona detak jantung dan pace dari akun Strava-mu tampil di sini setelah sinkron berhasil.</div>';
   var hr=z.heart_rate_zones||[], rz=z.run_zones||[];
   function pace(ms){ return fmtPace(1000/ms); }
-  var h='<div class="tw"><table><thead><tr><th>Zona</th><th>Detak jantung (bpm)</th><th>Pace (/km)</th></tr></thead><tbody>';
+  var hasP=!!z.run_zones;
+  var h='<div class="tw"><table><thead><tr><th>Zona</th><th>Detak jantung (bpm)</th>'+(hasP?'<th>Pace (/km)</th>':'')+'</tr></thead><tbody>';
   var n=Math.max(hr.length, rz.length), i;
   for(i=0;i<n;i++){
     var a=hr[i], b=rz[i], hrT = a ? (a.max!==undefined&&a.max!==null ? (a.min+"–"+a.max) : (a.min+"+")) : "—";
     var pT="—"; if(b){ if(!b.min) pT="lebih lambat dari "+pace(b.max); else if(b.max===undefined||b.max===null) pT="lebih cepat dari "+pace(b.min); else pT=pace(b.max)+"–"+pace(b.min); }
-    h+='<tr><td><b>Z'+(i+1)+'</b></td><td class="n">'+hrT+'</td><td class="n">'+pT+'</td></tr>';
+    h+='<tr><td><b>Z'+(i+1)+'</b></td><td class="n">'+hrT+'</td>'+(hasP?'<td class="n">'+pT+'</td>':'')+'</tr>';
   }
-  h+='</tbody></table></div><p class="note">Dibaca dari Strava'+(z.run_zone_source?' (sumber zona pace: '+esc(z.run_zone_source)+')':'')+'. Zona pace Strava diperkirakan dari prediksi performa, jadi anggap sebagai acuan kasar.</p>';
+  h+='</tbody></table></div><p class="note">'+(!hasP?'Zona detak jantung dibaca dari Strava. Strava tidak menyediakan zona pace lewat koneksi langsung, jadi pakai tabel pace latihan di atas.':'Dibaca dari Strava'+(z.run_zone_source?' (sumber zona pace: '+esc(z.run_zone_source)+')':'')+'. Zona pace Strava diperkirakan dari prediksi performa, jadi anggap sebagai acuan kasar.')+'</p>';
   return h;
 }
 function renderPace(){
